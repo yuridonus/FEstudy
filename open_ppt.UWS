@@ -1,0 +1,5 @@
+f_name = "C:\Users\Owner\Documents\GitHub\FEstudy\uwsc.pptx"
+ POWERPOINT = CREATEOLEOBJ("POWERPOINT.Application")
+ POWERPOINT.Visible = TRUE
+ POWERPOINT.Presentations.OPEN(FILENAME := f_name)
+ 
