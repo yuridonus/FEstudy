@@ -1,0 +1,31 @@
+// ŽÀŒ±
+
+id = GETID("Mozilla Firefox", "MozillaWindowClass")
+pagenum = 1
+
+ctrlwin(id,activate)
+KBD(VK_F5,CLICK,1514)
+while pagenum < 20
+	sleep(0.8)
+	flg = false
+	
+	string = GETITEM( id, ITM_accclk)
+	for i = 0 to string-1
+		bid = ALL_ITEM_LIST[i]
+//		print bid
+		if pos("‚Å‚·",bid)>0 then
+			flg = true
+			break
+		endif
+	next
+	
+	if flg then
+		CLKITEM(id,"Áª¯¸‚µ‚½‘¡‚è•¨‚ðŽó‚¯Žæ‚é",CLK_MUSMOVE)
+		sleep(0.6)
+		CLKITEM(id,"‘¡‚è•¨Ø½Ä‚Ö–ß‚é",CLK_MUSMOVE)
+	else
+		CLKITEM(id,pagenum+1,CLK_MUSMOVE)
+//		print pagenum
+		pagenum = pagenum + 1
+	endif
+wend

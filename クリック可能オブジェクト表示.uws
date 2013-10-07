@@ -1,0 +1,25 @@
+// ŽÀŒ±
+
+//id = GETID("Google Chrome","Chrome_WidgetWin_1")
+id = GETID("Mozilla Firefox", "MozillaWindowClass")
+//id = GETID("±²ÄÞÙÏ½À°")
+
+
+//ctrlwin(id,activate)
+botton = GETITEM( id, ITM_accclk)
+print botton
+print "aaaaaaaaaaaaaaaaaaaaa"
+for i = 0 to botton-1
+	bid = ALL_ITEM_LIST[i]
+	print bid
+next
+//url = getstr(id,1,str_acc_edit)
+//print url
+//clkitem(id,"http://sp.pf.mbga.jp/12008305/?guid=ONurl=http%3A%2F%2F125.6.169.35%2Fidolmaster%2Fmypage%",CLK_SHORT or CLK_MUSMOVE)
+//while true
+//sleep(0.3)
+//url2 = getstr(id,1,str_acc_edit)
+//if url <> url2 then break
+//wend
+//print url2
+
