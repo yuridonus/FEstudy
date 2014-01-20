@@ -1,0 +1,60 @@
+// 画像のロード用
+DEF_DLL LoadImageA(long,string,long,long,long,long):long:user32.dll
+// デバイスコンテキストの用意
+DEF_DLL GetDC(HWND):long:user32.dll
+DEF_DLL CreateCompatibleDC(long):long:GDI32.dll
+DEF_DLL SelectObject(long,long):long:GDI32.dll
+// ビットマップ描画
+DEF_DLL BitBlt(long,int,int,int,int,long,int,int,long):long:GDI32.dll
+// 解放
+DEF_DLL DeleteDC(long):bool:GDI32.dll
+DEF_DLL DeleteObject(long):bool:GDI32.dll
+DEF_DLL ReleaseDC(HWND,long):int:user32.dll
+
+IMAGE_BITMAP = 0
+LR_LOADFROMFILE = $10
+SRCCOPY = $00CC0020
+
+//Const SRCAND = $008800C6
+//Const SRCPAINT = $00EE0086
+//Const SRCINVERT = $00660046
+//Const NOTSRCCOPY = $00330008
+
+cookieBitmap = LoadImageA(0,"森.bmp",IMAGE_BITMAP,0,0,LR_LOADFROMFILE)
+whiteBitmap = LoadImageA(0,"white.bmp",IMAGE_BITMAP,0,0,LR_LOADFROMFILE)
+
+id=exec("notepad")
+hwnd=IDTOHND(id)
+hDC = GetDC(hWnd)
+memory_DC = CreateCompatibleDC(hDC)
+whitememory_DC = CreateCompatibleDC(hDC)
+
+SelectObject(memory_DC, cookieBitmap)
+SelectObject(whitememory_DC, whiteBitmap)
+
+
+while true
+X = random(30)+1
+Y = random(30)+1
+
+BitBlt(hDC,x,y,62,68,memory_DC,0,0,SRCCOPY)
+
+while !getkeystate(vk_DOWN)
+sleep(0.1)
+if getkeystate(vk_esc) then break 2
+wend
+
+BitBlt(hDC,x,y,62,68,whitememory_DC,0,0,SRCCOPY)
+
+sleep(0.2)
+wend
+
+DeleteDC(memory_DC)
+DeleteDC(whitememory_DC)
+
+DeleteObject(cookieBitmap)
+DeleteObject(whiteBitmap)
+
+ReleaseDC(hWnd, hDC)
+sleep(0.3)
+ctrlwin(id,close)
