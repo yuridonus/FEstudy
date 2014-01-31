@@ -1,0 +1,87 @@
+// 画像のロード用
+DEF_DLL LoadImageA(long,string,long,long,long,long):long:user32.dll
+// デバイスコンテキストの用意
+DEF_DLL GetDC(HWND):long:user32.dll
+DEF_DLL CreateCompatibleDC(long):long:GDI32.dll
+DEF_DLL SelectObject(long,long):long:GDI32.dll
+// ビットマップ描画
+DEF_DLL BitBlt(long,int,int,int,int,long,int,int,long):long:GDI32.dll
+// 解放
+DEF_DLL DeleteDC(long):bool:GDI32.dll
+DEF_DLL DeleteObject(long):bool:GDI32.dll
+DEF_DLL ReleaseDC(HWND,long):int:user32.dll
+
+IMAGE_BITMAP = 0
+LR_LOADFROMFILE = $10
+SRCCOPY = $00CC0020
+
+//Const SRCAND = $008800C6
+//Const SRCPAINT = $00EE0086
+//Const SRCINVERT = $00660046
+//Const NOTSRCCOPY = $00330008
+
+cookieBitmap = LoadImageA(0,"cookie.bmp",IMAGE_BITMAP,0,0,LR_LOADFROMFILE)
+breakBitmap = LoadImageA(0,"break.bmp",IMAGE_BITMAP,0,0,LR_LOADFROMFILE)
+whiteBitmap = LoadImageA(0,"white.bmp",IMAGE_BITMAP,0,0,LR_LOADFROMFILE)
+
+exec("notepad")
+//ctrlwin(id,max)
+id= getid("メモ帳")
+hwnd=IDTOHND(id)
+hDC = GetDC(hWnd)
+cookieMemory_DC = CreateCompatibleDC(hDC)
+whiteMemory_DC = CreateCompatibleDC(hDC)
+breakMemory_DC = CreateCompatibleDC(hDC)
+
+SelectObject(cookieMemory_DC, cookieBitmap)
+SelectObject(whiteMemory_DC, whiteBitmap)
+SelectObject(breakMemory_DC, breakBitmap)
+while true
+  picX = random(300)+5
+  picY = random(300)+5
+
+  BitBlt(hDC,picX,picY,76,78,cookieMemory_DC,0,0,SRCCOPY)
+
+  while true
+    // 左クリックされるorESCキーが押されるまで待機
+    while !getkeystate(VK_LBUTTON)
+      sleep(0.1)
+      if getkeystate(vk_esc) then break 3
+    wend
+
+    mouseX = G_MOUSE_X
+    mouseY = G_MOUSE_Y
+    mouseX = mouseX - STATUS(id, ST_X)         // ウィンドウからの相対位置
+    mouseY = mouseY - STATUS(id, ST_Y) - 50
+
+    if clickSucceed(picX,picY,mouseX,mouseY) then
+      BitBlt(hDC,picX,picY,76,78,breakMemory_DC,0,0,SRCCOPY)
+      sleep(0.2)
+      BitBlt(hDC,picX,picY,76,78,whiteMemory_DC,0,0,SRCCOPY)
+      break
+    ENDIF
+    sleep(0.01)
+  wend
+  sleep(0.2)
+wend
+
+DeleteDC(cookiememory_DC)
+DeleteDC(whitememory_DC)
+DeleteDC(breakmemory_DC)
+
+DeleteObject(cookieBitmap)
+DeleteObject(whiteBitmap)
+DeleteObject(breakBitmap)
+
+
+ReleaseDC(hWnd, hDC)
+sleep(0.3)
+ctrlwin(id,close)
+
+
+FUNCTION clickSucceed (picX,picY,mouseX,mouseY)
+  RESULT = FALSE
+  if picX <= mouseX AND mouseX < picX + 80 AND picY <= mouseY AND mouseY < picY + 80 THEN
+    RESULT = TRUE
+  ENDIF
+FEND
