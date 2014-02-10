@@ -1,0 +1,26 @@
+// ウィンドウ出るまで待機する
+PROCEDURE waituntilOpenWinF(windowName, endTime)
+timeoutCount = 0
+while timeoutCount < endTime
+  if checkF(windowName) then
+    break
+  endif
+  sleep(1) // ここは負荷を考慮して変更するかも
+  timeoutCount = timeoutCount + 1
+wend
+if timeoutCount = endTime then
+  print "「" + windowName + "」ウィンドウが出ません。強制終了します"
+  exitexit
+endif
+FEND
+
+FUNCTION checkF(windowName)
+  result = false
+  count = getallwin()
+  for i = 0 to count-1
+    title = status(all_win_id[i], st_title)
+    if pos(title,windowName) then
+      result = true
+    endif
+  next
+FEND
