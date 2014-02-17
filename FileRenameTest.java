@@ -20,6 +20,14 @@ public class FileRenameTest {
 	}
 
 	@Test
+	public void testRename() {
+		fileRename = new FileRename();
+		String hogeString = "d:\\temp\\unko";
+		hogeString = fileRename.rename(hogeString);
+		System.out.println(hogeString);
+	}
+
+	@Test
 	public void readFolderTest() {
 		fileRename = new FileRename();
 		fileRename.readFolder("D:\\temp");
