@@ -1,0 +1,284 @@
+﻿
+Programming/Ruby/Sinatra
+
+
+Table of Contents
+
+準備
+Ruby
+
+なにはなくともRuby。
+
+Windowsの場合、RubyInstallerを使うのが楽そうです。
+RubyInstaller for Windows
+
+これから始めるならRuby 2系で良いと思います。
+
+インストールが完了したら、インストールが成功しているか確認するために書きコマンドを実行してみると良いです。
+
+ruby -v
+
+Gem
+
+Rubyのライブラリ管理ツール。
+Rubyの成果物は gem形式で、RubyGems.orgで公開されています。
+Javaで言うと jar = gem / RubyGems.org = MavenCentral な対応関係。
+
+RubyInstallerでRubyをインストールするとGemは標準でインストールされてる（はずな）ので、特にインストール作業は必要ありません。
+そうでない場合はGoogle先生に聞いて下さい。
+
+Rubyインストールの時と同様、コマンド実行で正常にインストールが完了しているか確認しておいて下さい。
+
+gem -v
+
+Bundler
+
+Railsの依存ライブラリ管理ツール。
+現在では単体でもよく使われるようになっています。
+
+Bundlerは下記コマンドを叩くことでGem経由でインストールできます。
+
+gem install bundler
+
+今までと同様、インストールが正常に(ry
+
+bundle -v
+
+BundlerもGemもRubyGems.orgからgemをダウンロードしてインストールするという動作は同じなのですが、Gemはマシン全体が利用する場所にgemをインストールするのに対し、Bundlerはプロジェクト（ディレクトリ）単位でGemを管理できます。
+Rubyの開発速度は早く、gemのバージョンがすぐに変わってしまうことがあるため、「このプロジェクトではこのバージョンのgemを使いたい。でも、コッチのプロジェクトではこのバージョンのgemを…」というように使いたいgemのバージョンが競合してしまう場合があります。
+そのため、なるべく小さい単位でgemを管理するためにもGemコマンドよりBundlerを利用すべきです。
+Hello World
+
+では、今までインストールしたものを使ってSinatraプロジェクトを作成してみます。
+
+まず、プロジェクトディレクトリを作成します。
+
+$> mkdir HelloSinatra
+$> cd HelloSinatra
+
+次にBundlerで使うGemfileを作成します。
+
+$> bundle init
+
+カレントディレクトリにGemfileが生成されているはずです。 今回はHelloWorldを表示するだけなので、使うgemはSinatraだけで良いでしょう。
+
+Gemfile
+
+source 'https://rubygems.org'
+
+gem 'sinatra'
+
+Gemfileを編集したら、Bundlerを使ってGemfileに書かれたgemをインストールします。
+
+bundle install --path vendor/bundle
+
+bundle install コマンドでカレントディレクトリのGemfileに書かれた内容のgemをインストールします。
+pathオプションはgemの格納先を指定します。格納先に指定したvendor/bundleはRails時代の慣習で、今はもう古いものかもしれません。
+
+bundle installが終わるとカレントディレクトリにGemfile.lockファイル、.bundleディレクトリ、vendorディレクトリが生成されているはずです。
+それぞれ下記の情報を格納しています。
+
+    Gemfile.lockファイル
+        bundle installコマンドを実行した時点のgemファイルのバージョン
+        Gemfile.lockをgitなどのバージョン管理の管理下において共有することで、チーム内で同じバージョンのgemを利用して開発を行うことができます
+    .bundleディレクトリ
+        bundle installコマンドのpathオプションで指定したgemの格納先など、bundleコマンドに関するメタ情報を格納するディレクトリ
+    vendorディレクトリ
+        bundle installコマンドのpathオプションで指定したgemの格納先
+
+ここまででSinatraアプリ開発の下準備が整いました。
+
+Sinatra用のrubyファイルapp.rbを作成します。
+
+app.rb
+
+require 'sinatra'
+
+get '/' do
+  p 'Hello World'
+end
+
+このSinatraアプリケーション起動するために下記コマンドを実行します。
+
+bundle exec ruby app.rb
+
+特にエラーが出ていなければ、ブラウザで http://localhost:4567 にアクセスするとHello Worldが表示される。
+
+bundle exec コマンドはbundle installコマンドによってインストールされたgemを利用するために必要なコマンドです。
+これを付けずに、ただ
+
+ruby app.rb
+
+とするだけだと、Gemfileに書かれたsinatraのgemが存在しないためエラーとなるはずです。
+(以前に gem install sinatra などでsinatraが動作する環境が作成されていた場合はエラーとなりません)
+Sinatra 開発TIPS
+
+ここから先は、Sinatraプロジェクトを作成する際の流儀などについて、各ブログやGithub上のSinatraプロジェクトを見て回った結果、分かったことを書いていきます。
+「流儀」みたいなものなので、必ずこれに従わなくてはいけない訳ではありません。
+ディレクトリ構成
+gem development style
+
+Rubyプロジェクトはgemとしてリリースされるため、Ruby開発を行う際はgem用のプロジェクトテンプレートを利用することが多いです。
+(Githubで公開されているSinatraプロジェクトはだいたいこのスタイルで作られています)
+ちゃんとリリースするものを作る時は、このスタイルで開発を進めるのが良いと思います。
+
+gem用のテンプレートプロジェクトはbundle gemコマンドで作成することができます。
+
+$> bundle gem gem_sample
+$> tree gem_sample /F
+gem_sample
+│  .gitignore
+│  Gemfile
+│  gem_sample.gemspec
+│  LICENSE.txt
+│  Rakefile
+│  README.md
+│
+└─lib
+    │  gem_sample.rb
+    │
+    └─gem_sample
+            version.rb
+
+gemテンプレートプロジェクトの特徴として、下記のものが挙げられます。
+
+    Gemfileの書き方
+        今まではプロジェクトで使用するgemをGemfileに記述していましたが、依存関係はgem_sample.gemspecの中に記述するようになります
+        Gemfileには gemspec と記述するだけで、.gemspecファイル内で依存関係として記述されているgemをインストールできるようになります
+    app.rbの配置
+        Sinatraプロジェクトではルート・ディレクトリにメインと成るapp.rbを配置していましたが、lib/gem_sample/app.rbという場所に置くのが一般的なように見えます（Githubを見ると）
+        これはRubyで名前空間の衝突を避けるためにclassをmodule gem_sampleでラップする習慣があり、その構造（gem_sample/app）とディレクトリ構造を対応させるためのものだと思われます
+
+settings
+
+Sinatraではルートディレクトリ配下の特定のディレクトリに対しての挙動がデフォルトで定義されています
+
+    public
+        このディレクトリ配下に置かれたディレクトリ/ファイルは静的に配信される（http://${sinatra.host}/css/sample.css　でアクセスすることができる）
+        cssやjsファイルを置くことが多い
+    views
+        Sinatraのviewテンプレートを置く場所
+
+他にも様々な設定が存在します。
+Sinatra: Configuring Settings
+server
+
+Sinatraがデフォルトで利用するWebサーバはWEBRickですが、手軽に動かせる反面、動作が遅いことで知られています。
+Windowsならthin、Unixならthis,Unicorn,Passengerへの移行を検討しましょう。
+
+※参考
+uu59のメモ | Rubyのhttpサーバまとめ 2012年4月版(thin, Unicorn, Passenger, etc)
+Rails用APサーバー比較 - 技術メモ的なモノと気になるモノ
+
+性能が高いのがPassenger、テスト環境なら手軽に使えるthinが良さそうです。
+thin
+
+Thin - yet another web server
+橋本商会 » apache2のサブディレクトリをthinで起動してるsinatraにプロキシする
+
+Gemfileに下記を追記する。
+
+gem 'thin'
+
+プロジェクトルートディレクトリにconfig.ruを作成する。
+thinはプロジェクトルートディレクトリのconfig.ruという名前のファイルを勝手に見つけてくれるようです。
+(拡張子の.ruは、恐らくRackUpの略)
+
+config.ru
+
+require 'rubygems'
+require 'sinatra'
+require File.expand_path('app', File.dirname(__FILE__))
+
+run Sinatra::Application
+
+また、thinを利用するにはメインアプリケーションでrequire 'rack'をする必要があります。
+
+app.rb
+
+require 'rack'
+...
+
+以上の準備が出来たら、下記コマンドを実行するとSinatraアプリケーションが起動します
+
+bundle exec thin start
+
+unicorn
+
+※Windowsでは使えないらしい
+foreman
+
+複数のプロセスを管理するためのgem。
+Herokuにデプロイするにはforemanを使う必要があったはず。
+foreman について - 君の瞳はまるでルビー - Ruby 関連まとめサイト
+(また、foremanを利用する場合はSinatraをmodular形式で作らなきゃいけないっぽいです。 Sinatraのmodular style / Classic styleについては => Sinatra超完全解説 (1) Classic Style と Modular Application - やゆぐ)
+
+使い方は上記サイトを参考に。
+rack上で動作するSinatraプロジェクト(WEBRickは×。thinは○。)ならProcfileを追加するだけなので、簡単に実装できます。
+が、foremanの最新版はWindows上で動作しないため、Gemfile内でforemanのバージョンを0.61に固定する必要があります。
+windowsで最新版のforeman使うとエラー出る - みんなのちからになりたい
+
+Gemfile上でインストールするgemのバージョンを指定する方法は下記。
+
+Gemfile
+
+gem 'foreman', '0.61'
+
+haml
+
+SinatraはMVCのMCのみを管理するWebフレームワークであり、Viewの部分は既存のテンプレートライブラリを必要とします。
+中でもよく利用されるのはhamlであり、hamlを利用しておけばとりあえず問題ないはずです。
+という訳でSinatraからhamlを利用する場合のTIPSを紹介します。
+
+ちなみに、SlimというJavascriptのjadeというテンプレートエンジンに影響されたhamlよりも記述量の少ないテンプレートエンジンも最近よく使われているようです。
+layout.haml
+
+Sinatraからhamlを使う場合、Sinatraから呼ばれる全てのページで共通して使われる部分をテンプレート化できます。
+htmlタグやヘッダ情報を共通にしたい場合などに使われます。
+
+下記のようにSinatraアプリからindex.hamlを呼び出す際、
+
+app.rb
+
+...
+get '/' do
+  haml :index
+end
+...
+
+Viewsディレクトリ(index.hamlと同じディレクトリ)内に下記のようなlayout.hamlというファイルが存在すると、
+
+layout.haml
+
+%html
+  %head
+    %title= 'Sinatra Layout Sample'
+  %body
+    = yield
+
+index.hamlの内容がlayout.hamlの "= yield" の部分に展開されたものとして、HTMLを生成することができます。
+（上記と同様の設定でSinatraアプリから next.haml が呼び出されていた場合、layout.hamlの "= yield"の部分にnext.hamlの内容が展開される…といった具合です）
+partial
+
+layout.hamlでは"= yield"の部分にSinatraから呼び出されたhamlを展開するという限定的な利用しか出来ませんでしたが、
+Sinatraにはhamlファイル内に別のhamlファイルを展開するための便利メソッドがあります。
+
+index.haml
+
+= haml :header
+
+%div
+  %p= 'caption'
+  %img(src="/sample.jpg")
+
+= haml :footer
+
+hamlファイル内で"= haml :sample"と書くことで指定されたhamlを展開することが出来ます。
+上記のindex.hamlの場合、"= haml :header"の部分にはindex.hamlと同じディレクトリに存在するheader.hamlが展開されます。
+footerの場合も同様です。
+
+このhamlメソッドを使うことでページの内容を部品化して管理することが出来るようになります。
+
+Last edited by kaakaa, 2014-02-27 16:58:32
+
+Delete this Page
