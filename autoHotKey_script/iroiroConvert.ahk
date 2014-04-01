@@ -1,0 +1,2 @@
+vk1Dsc07B::Del         ;ñ≥ïœä∑Å®Del
+F1       ::Backspace   ;
