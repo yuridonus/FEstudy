@@ -1,0 +1,14 @@
+id = GETID("config.properties のセキュリティの詳細設定","#32770")
+
+ctrlwin(id,activate)
+
+dim name[] = "ボタン", "リスト/コンボ", "タブ", "メニュー", "ツリービュ", "リストビュ", "エディト", "スタテック文字", "ステータスバー", "ツールバー", "ACCクリック可", "ACCテキスト"
+dim kid[] =  ITM_BTN, ITM_LIST, ITM_TAB, ITM_MENU, ITM_TREEVEW, ITM_LSTVEW, ITM_EDIT, ITM_STATIC, ITM_STATUSBAR, ITM_TOOLBAR, ITM_ACCCLK, ITM_ACCTXT
+for x = 0 to Length(name)-1
+  print name[x]
+  for y = 0 to GETITEM(id, kid[x])-1  // GETITEM関数により種別指定で文字取得
+    print "　" + ALL_ITEM_LIST[y]
+  next
+  print
+next
+SLEEP(3)

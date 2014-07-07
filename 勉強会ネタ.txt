@@ -1,4 +1,19 @@
-﻿最終目標：バイナリエディタをちょっとだけ触って遊ぶ
+﻿iphoneアプリをmonacaで作ってみるテスト
+参考：http://www.buildinsider.net/mobile/monaca/01
+
+流れ
+なんかiphoneアプリ作りたい・・・作りたくない？
+↓
+appleIDのほかにmacが必須、金もかかる
+↓
+オレはようやくのぼりはじめたばかりだからな このはてしなく遠いry
+↓
+いや、なんとかならんかね？
+↓
+monacaとかいうのでいろいろ遊べそう！
+
+
+最終目標：バイナリエディタをちょっとだけ触って遊ぶ
 
 
 参考：http://www.geocities.co.jp/SiliconValley-SanJose/5780/data.html
