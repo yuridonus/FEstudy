@@ -1,6 +1,6 @@
 ﻿iphoneアプリをmonacaで作ってみるテスト
 参考：http://www.buildinsider.net/mobile/monaca/01
-
+　　　http://html5experts.jp/ataruohto/7274/
 流れ
 なんかiphoneアプリ作りたい・・・作りたくない？
 ↓
