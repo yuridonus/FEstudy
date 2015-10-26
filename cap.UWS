@@ -1,0 +1,23 @@
+i=0
+while i<3
+sleep(1)
+i=i+1
+fukidasi (i,G_MOUSE_X,G_MOUSE_Y-70)
+wend
+sleep(0.5)
+//id = getid(GET_ACTIVE_WIN)
+id = getid(GET_FROMPOINT_WIN)
+
+// 格納フォルダのファイル数を数えて名前をつける
+count = getdir("cap")
+saveimg("cap/cap"+count+".bmp",id)
+
+sleep(0.2)
+fukidasi ()
+select SLCTBOX(SLCT_BTN, 0, "保存フォルダを開きますか", "うん", "やだ")
+  case SLCT_1
+  EXEC("Explorer.exe "+"D:\tool\uwsc48e\cap")
+
+  case SLCT_2
+
+selend
