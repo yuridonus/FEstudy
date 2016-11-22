@@ -1,0 +1,27 @@
+[user]
+	name = suzuki
+	email = suzuki@hogemail
+[gui]
+	encoding = utf-8
+[core]
+	quotepath = false
+	autoCRLF = false
+[alias]
+	st = status
+	co = checkout
+[http]
+	proxy = http://suzuki_kojiro%40jp.fujitsu.com:8192274321@kws.proxy.nic.fujitsu.com:8080
+	sslVerify = false
+[https]
+	proxy = http://proxy.gw.nic.fujitsu.com:8080
+[url "https://"]
+        insteadOf = git://
+[push]
+	default = simple
+
+
+
+
+[github]
+	user = yuridonus
+			
