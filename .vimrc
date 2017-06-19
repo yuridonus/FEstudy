@@ -1,53 +1,81 @@
 set nu
+set tabstop=2
+set autoindent
+"set expandtab " auto cange tab to space
+set shiftwidth=2
 set nobackup
+set noswapfile
+set smartindent
 set undodir=D:/tool/vim74-kaoriya-win64/undo
+set nocompatible
+set showtabline=2
+filetype plugin on
+autocmd FileType text setlocal textwidth=0
 
+" all unicode treat double chalactor
+set ambiwidth=double
 " statusline setting
 set laststatus=2
-set statusline=%F%m%r%h%w\%=[TYPE=%Y]\[FORMAT=%{&ff}]\[ENC=%{&fileencoding}]\[LOW=%l/%L]
+"set statusline=%F%m%r%h%w\%=[TYPE=%Y]\[FORMAT=%{&ff}]\[ENC=%{&fileencoding}]\[LOW=%l/%L]
+set statusline=%F%m%r%h%w\%=[TYPE=%Y]\[ENC=%{&fileencoding}]\[LOW=%l/%L]
 
-" ^ and $ keys are too far
+" ^ and $ keys remap
 nnoremap <Space>h  ^
 nnoremap <Space>l  $
-
-" ignore auto newline
-set formatoptions=q
 
 " ignore risky keymap
 nnoremap ZZ <Nop>
 nnoremap ZQ <Nop>
 
-" jk
+" jk to esc
 inoremap jk <Esc>
+
+"set omnifunc
+setlocal omnifunc=syntaxcomplete#Complete
+
+"<C-Space> to omnifunc
+inoremap <C-Space> <C-x><C-o>
+
+" vimdiff color setting
+hi DiffAdd    ctermfg=black ctermbg=2
+hi DiffChange ctermfg=black ctermbg=3
+hi DiffDelete ctermfg=black ctermbg=6
+hi DiffText   ctermfg=black ctermbg=7
+
+" view tab
+"set list
+"set listchars=tab:Â»-,trail:-,nbsp:%,eol:â†²
 
 "---------------------------
 " Start Neobundle Settings.
 "---------------------------
-" bundle‚ÅŠÇ—‚·‚éƒfƒBƒŒƒNƒgƒŠ‚ğw’è
+" bundleã§ç®¡ç†ã™ã‚‹ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’æŒ‡å®š
 set runtimepath+=~/.vim/bundle/neobundle.vim/
- 
+
 " Required:
 call neobundle#begin(expand('~/.vim/bundle/'))
- 
-" neobundle©‘Ì‚ğneobundle‚ÅŠÇ—
+
+" neobundleè‡ªä½“ã‚’neobundleã§ç®¡ç†
 NeoBundleFetch 'Shougo/neobundle.vim'
- 
-" ’Ç‰Á‚Ìƒvƒ‰ƒOƒCƒ“
+
+" è¿½åŠ ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³
 
 " NERDTree
 NeoBundle 'scrooloose/nerdtree'
- 
-" vim/ruby
-"NeoBundle "vim-ruby/vim-ruby"
+
+" gauche
+NeoBundle 'aharisu/vim_goshrepl'
+"NeoBundle 'aharisu/vim_gdev'
 
 call neobundle#end()
- 
+
 " Required:
 filetype plugin indent on
- 
-" –¢ƒCƒ“ƒXƒg[ƒ‹‚Ìƒvƒ‰ƒOƒCƒ“‚ª‚ ‚éê‡AƒCƒ“ƒXƒg[ƒ‹‚·‚é‚©‚Ç‚¤‚©‚ğq‚Ë‚Ä‚­‚ê‚é‚æ‚¤‚É‚·‚éİ’è
+
+" æœªã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã®ãƒ—ãƒ©ã‚°ã‚¤ãƒ³ãŒã‚ã‚‹å ´åˆã€ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«ã™ã‚‹ã‹ã©ã†ã‹ã‚’å°‹ã­ã¦ãã‚Œã‚‹ã‚ˆã†ã«ã™ã‚‹è¨­å®š
 NeoBundleCheck
- 
+
 "-------------------------
 " End Neobundle Settings.
 "-------------------------
+
